@@ -198,7 +198,7 @@ function updateEmployeeRole() {
   });
 }
 
-//
+//move database.js file into the index.js file, this initializes connection to sql 
 function initializeDatabase(callback) {
   db = mysql.createConnection({
     host: 'localhost',
