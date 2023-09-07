@@ -3,6 +3,8 @@ const mysql = require('mysql2');
 
 let db;
 
+//here I use inquirer to make a list of all the different functionalities of my program, using the .then functionality to 
+//take the answer and then execute the accurate designated function that the user chose
 function mainMenu() {
   inquirer.prompt([
     {
@@ -49,6 +51,7 @@ function mainMenu() {
   });
 }
 
+//displays all departments in console
 function viewAllDepartments() {
   db.query('SELECT id, name FROM departments', (err, rows) => {
     if (err) throw err;
@@ -57,6 +60,7 @@ function viewAllDepartments() {
   });
 }
 
+//displays all roles in console
 function viewAllRoles() {
   db.query('SELECT roles.id, roles.title, roles.salary, departments.name as department FROM roles JOIN departments ON roles.department_id = departments.id', (err, rows) => {
     if (err) throw err;
@@ -65,6 +69,7 @@ function viewAllRoles() {
   });
 }
 
+//displays all employees in console
 function viewAllEmployees() {
   db.query('SELECT employees.id, employees.first_name, employees.last_name, roles.title as job_title, departments.name as department, roles.salary, CONCAT(manager.first_name, " ", manager.last_name) as manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees manager ON employees.manager_id = manager.id', (err, rows) => {
     if (err) throw err;
@@ -73,6 +78,7 @@ function viewAllEmployees() {
   });
 }
 
+//functionality to add a department and store it
 function addDepartment() {
   inquirer.prompt([
     {
@@ -89,6 +95,7 @@ function addDepartment() {
   });
 }
 
+//functionality to add a role and store it properly
 function addRole() {
   db.query('SELECT * FROM departments', (err, departments) => {
     if (err) throw err;
@@ -119,6 +126,7 @@ function addRole() {
   });
 }
 
+//function to add employees
 function addEmployee() {
   db.query('SELECT id, title FROM roles', (err, roles) => {
     if (err) throw err;
@@ -160,6 +168,7 @@ function addEmployee() {
   });
 }
 
+//function to update employee roles
 function updateEmployeeRole() {
   db.query('SELECT * FROM employees', (err, employees) => {
     if (err) throw err;
@@ -189,6 +198,7 @@ function updateEmployeeRole() {
   });
 }
 
+//
 function initializeDatabase(callback) {
   db = mysql.createConnection({
     host: 'localhost',
@@ -203,7 +213,7 @@ function initializeDatabase(callback) {
   });
 }
 
-// Initialize the database and main menu
+// Initialize the database and launches the main menu function
 initializeDatabase((err, connection) => {
   if (err) throw err;
   db = connection;
